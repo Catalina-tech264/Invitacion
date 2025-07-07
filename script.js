@@ -63,33 +63,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Card flip functionality
     document.querySelectorAll('.card').forEach(card => {
-        // Flip card on click
-        card.addEventListener('click', function() {
-            this.classList.toggle('flipped');
-        });
+        let touchStartTime = 0;
+        let touchEndTime = 0;
+        const tapDelay = 300; // Tiempo máximo para considerar un toque (ms)
         
-        // Prevent text selection on double click
+        // Función para voltear la tarjeta
+        function flipCard() {
+            this.classList.toggle('flipped');
+        }
+        
+        // Manejar clic en escritorio
+        card.addEventListener('click', flipCard);
+        
+        // Prevenir selección de texto al hacer doble clic
         card.addEventListener('mousedown', function(e) {
             if (e.detail > 1) {
                 e.preventDefault();
             }
         });
         
-        // Add touch support for mobile devices
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
+        // Manejar toques en móviles
         card.addEventListener('touchstart', function(e) {
+            touchStartTime = Date.now();
             touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
         
         card.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            // Only flip if the touch wasn't a swipe
-            if (Math.abs(touchEndX - touchStartX) < 10) {
-                this.classList.toggle('flipped');
+            touchEndTime = Date.now();
+            const touchDuration = touchEndTime - touchStartTime;
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            
+            // Calcular la distancia del toque
+            const deltaX = Math.abs(touchEndX - touchStartX);
+            const deltaY = Math.abs(touchEndY - touchStartY);
+            
+            // Si fue un toque rápido y con poca distancia, considerarlo un toque
+            if (touchDuration < tapDelay && deltaX < 10 && deltaY < 10) {
+                e.preventDefault();
+                flipCard.call(this);
             }
-        }, { passive: true });
+        }, { passive: false }); // Cambiado a false para permitir preventDefault()
     });
 });
 
