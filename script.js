@@ -73,7 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Manejar clic en escritorio
-        card.addEventListener('click', flipCard);
+        card.addEventListener('click', function(e) {
+            // Si el clic fue en un botón o enlace, no voltear la tarjeta
+            if (e.target.closest('button, a, .map-button')) {
+                return;
+            }
+            flipCard.call(this);
+        });
         
         // Prevenir selección de texto al hacer doble clic
         card.addEventListener('mousedown', function(e) {
@@ -84,12 +90,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Manejar toques en móviles
         card.addEventListener('touchstart', function(e) {
+            // Si el toque fue en un botón o enlace, no hacer nada
+            if (e.target.closest('button, a, .map-button')) {
+                return;
+            }
             touchStartTime = Date.now();
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
         
         card.addEventListener('touchend', function(e) {
+            // Si el toque fue en un botón o enlace, no hacer nada
+            if (e.target.closest('button, a, .map-button')) {
+                return;
+            }
+            
             touchEndTime = Date.now();
             const touchDuration = touchEndTime - touchStartTime;
             const touchEndX = e.changedTouches[0].screenX;
@@ -104,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 flipCard.call(this);
             }
-        }, { passive: false }); // Cambiado a false para permitir preventDefault()
+        }, { passive: false });
     });
 });
 
