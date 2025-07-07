@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Invitación Especial</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+        
+        :root {
+            --rosa-pastel: #F8C8DC;
+            --azul-pastel: #A7C7E7;
+            --blanco: #FFFAF7;
+            --azul-oscuro: #264b66;
+            --sombra: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --borde-redondeado: 15px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            font-family: 'Lora', serif;
+            background: linear-gradient(-45deg, 
+                var(--rosa-pastel) 0%, 
+                var(--azul-pastel) 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        
+        .background {
+            width: 100%;
+            height: 100%;
+            background: url('img/img-carta.webp') center/cover no-repeat;
+            transition: transform 0.5s ease;
+        }
+
+        
+        .center-button {
+        position: fixed;
+        top: 53%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        color: var(--azul-pastel);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        z-index: 10;
+        animation: pulse 2s infinite, buttonFadeIn 1s ease-out 0.8s forwards;
+    }
+
+    @keyframes buttonFadeIn {
+        to { opacity: 1; }
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(199, 217, 255, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 15px rgba(255, 200, 220, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 200, 220, 0);
+        }
+    }
+
+        /* Efecto de partículas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="background"></div>
+    </div>
+    
+    <a href="index.html" class="center-button">.</a>
+    
+    <div class="particles" id="particles-js"></div>
+
+    <script>
+        // Efecto de partículas
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('particles-js');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                createParticle();
+            }
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamaño aleatorio entre 2px y 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posición aleatoria
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Animación
+                const duration = Math.random() * 15 + 10;
+                particle.style.animation = `float ${duration}s linear infinite`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                container.appendChild(particle);
+                
+                // Reiniciar la posición cuando la partícula sale de la pantalla
+                setInterval(() => {
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                }, duration * 1000);
+            }
+            
+            // Añadir keyframes dinámicamente
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes float {
+                    0% {
+                        transform: translate(0, 0) rotate(0deg);
+                        opacity: 0;
+                    }
+                    10% {
+                        opacity: 0.8;
+                    }
+                    90% {
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) rotate(${Math.random() * 360}deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
